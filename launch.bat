@@ -1,3 +1,13 @@
 @echo off
-:: Solicita elevación automáticamente
-powershell -Command "Start-Process cmd -ArgumentList '/c cd /d %~dp0 && python main.py && pause' -Verb RunAs"
+:: Net-Phantom Launcher
+set "APPDIR=%~dp0"
+
+net session >nul 2>&1
+if %errorLevel% == 0 (
+    echo Starting Net-Phantom...
+    cd /d "%APPDIR%"
+    python main.py
+) else (
+    echo Requesting Administrator privileges...
+    powershell -Command "Start-Process cmd -ArgumentList '/k cd /d ""%APPDIR%"" && python main.py' -Verb RunAs"
+)

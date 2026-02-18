@@ -3,186 +3,90 @@
 **Network Security Auditing Dashboard with AI-Powered Traffic Analysis**
 
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
-![License](https://img.shields.io/badge/License-Educational-green.svg)
 ![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey.svg)
+![License](https://img.shields.io/badge/License-Educational-green.svg)
 
-Net-Phantom is a comprehensive network security auditing tool designed for educational purposes and authorized security research. It provides a modern GUI for network reconnaissance, MITM attacks, packet sniffing, and AI-powered traffic analysis using Llama 3.
+> **Warning:** For educational and authorized security research only. Unauthorized network analysis is illegal.
 
-## Legal Disclaimer
+---
 
-**IMPORTANT:** This tool is designed exclusively for educational purposes and authorized security auditing.
+## Screenshots
 
-- **Legal Use:** Testing on networks you own or have explicit written permission to audit
-- **Illegal Use:** Unauthorized access to networks, intercepting communications without permission
+![Dashboard](screenshots/dashboard.png)
+![Network Scanner](screenshots/scanner.png)
 
-**Unauthorized network analysis is illegal and punishable by law.** The developers assume no liability for misuse of this software.
+---
 
 ## Features
 
-### Network Analysis
-- **Network Scanner:** Fast ARP-based device discovery with MAC vendor identification
-- **Device Management:** Rename and track devices with persistent nicknames
-- **MITM Attack:** ARP spoofing for traffic interception and analysis
-- **Kill Switch:** Block internet access for targeted devices
-- **Packet Sniffer:** Real-time traffic capture with intelligent filtering
+| Feature | Description |
+|---|---|
+| Network Scanner | ARP-based device discovery with MAC vendor identification |
+| MITM Attack | ARP spoofing for traffic interception |
+| Packet Sniffer | Real-time capture filtered by target device IP |
+| Kill Switch | Block internet access for targeted devices |
+| AI Analysis | Behavioral analysis and user profiling via Llama 3 |
+| Smart Filtering | Removes CDNs, ads, telemetry, and noise automatically |
 
-### AI-Powered Analysis
-- **Traffic Analysis:** AI-powered behavioral analysis using Llama 3
-- **User Profiling:** Generate detailed profiles based on browsing patterns
-- **Smart Filtering:** Automatic removal of CDNs, ads, telemetry, and noise
-- **Target Isolation:** Filter traffic by device IP to avoid capturing host traffic
-
-### User Interface
-- **Modern GUI:** Built with CustomTkinter (dark-blue theme)
-- **Real-Time Monitoring:** Live packet statistics and traffic feed
-- **Visual Indicators:** Status indicators for MITM and sniffer states
-- **Threaded Operations:** Non-blocking GUI with background processing
+---
 
 ## Installation
 
-### Prerequisites
-- Python 3.8 or higher
-- Administrator/Root privileges (required for network manipulation)
-- Ollama with Llama 3 model (for AI analysis)
+**Requirements:** Python 3.8+, Windows, [Ollama](https://ollama.ai) with Llama 3
 
-### Setup
-
-1. Clone the repository
 ```bash
 git clone https://github.com/darama22/Net-Phantom.git
 cd Net-Phantom
-```
-
-2. Install dependencies
-```bash
 pip install -r requirements.txt
-```
-
-3. Install Ollama and Llama 3 (for AI features)
-```bash
-# Download Ollama from https://ollama.ai
 ollama pull llama3
 ```
 
-4. Run as administrator
+**Run:**
 ```bash
-# Windows
-.\launch.bat
-
-# Linux/macOS
-sudo python main.py
+# Double-click launch.bat  (auto-requests admin privileges)
 ```
+
+---
 
 ## Usage
 
-### Network Scanning
-1. Navigate to **Network Scanner** page
-2. Enter IP range (e.g., `192.168.1.0/24`)
-3. Click **Scan Network**
-4. View discovered devices with IP, MAC, and vendor information
+1. **Scan** — Enter IP range (e.g. `192.168.1.0/24`) and click Scan Network
+2. **MITM** — Select a device and click Start MITM
+3. **Sniff** — Click Start Sniffer to capture traffic from the target device only
+4. **Analyze** — Go to AI Analysis and click Analyze Traffic or Generate Profile
 
-### MITM Attack
-1. Select a target device from scan results
-2. Click **Start MITM**
-3. Optionally start **Packet Sniffer** to capture traffic
-4. Use **Kill Switch** to block target's internet access
-5. Click **Stop** when finished
-
-### AI Analysis
-1. Navigate to **AI Analysis** page
-2. Ensure sniffer has captured traffic
-3. Click **Analyze Traffic** for behavioral analysis
-4. Click **Generate Profile** for detailed user profiling
+---
 
 ## Project Structure
 
 ```
 Net-Phantom/
-├── main.py                  # Entry point with privilege verification
-├── launch.bat              # Windows launcher
-├── requirements.txt        # Python dependencies
+├── main.py
+├── launch.bat
+├── requirements.txt
 ├── core/
-│   ├── ai_analyzer.py      # AI traffic analysis with Llama 3
-│   ├── device_nicknames.py # Device nickname management
+│   ├── ai_analyzer.py      # Llama 3 traffic analysis
 │   ├── mitm.py             # ARP spoofing engine
-│   ├── platform_utils.py   # OS-specific IP forwarding
-│   ├── scanner.py          # Network device discovery
-│   ├── sniffer.py          # Packet capture engine
-│   └── traffic_filter.py   # Intelligent traffic filtering
+│   ├── scanner.py          # Network discovery
+│   ├── sniffer.py          # Packet capture
+│   └── traffic_filter.py   # Noise filtering
 └── gui/
-    ├── app.py              # Main application window
-    ├── logger.py           # Logging system
-    ├── thread_manager.py   # Background operation handler
+    ├── app.py
     └── pages/
-        ├── ai_page.py      # AI analysis interface
-        ├── dashboard.py    # Statistics dashboard
-        └── scanner_page.py # Scanner and MITM controls
+        ├── ai_page.py
+        ├── dashboard.py
+        └── scanner_page.py
 ```
-
-## Technical Details
-
-### Technologies
-- **Scapy:** Packet manipulation and network analysis
-- **CustomTkinter:** Modern GUI framework
-- **Ollama:** Local LLM inference for AI analysis
-- **psutil:** System utilities
-- **mac-vendor-lookup:** Device vendor identification
-
-### Key Features
-- **Thread-Safe Operations:** All network operations run in background threads
-- **Intelligent Filtering:** Removes CDNs, ads, telemetry, local IPs, and proxy discovery
-- **IP-Based Filtering:** Only captures traffic from targeted device
-- **Memory Management:** Automatic buffer limits (100 UI entries, 500 AI buffer)
-- **Cross-Platform:** Automatic IP forwarding for Windows, Linux, and macOS
-
-### Traffic Filtering
-The sniffer automatically filters out:
-- Private IP addresses (192.168.x.x, 10.x.x.x, etc.)
-- CDN domains (Akamai, Cloudflare, Azure Edge, etc.)
-- Telemetry services (Google Analytics, Microsoft, Apple)
-- Ad networks (DoubleClick, AdButler, etc.)
-- Certificate validation (OCSP, CRL)
-- mDNS and local discovery
-
-## Safety Features
-
-- **Automatic Cleanup:** ARP tables restored on exit
-- **Emergency Restoration:** atexit handlers ensure cleanup on crash
-- **IP Forwarding Management:** Automatically enabled/disabled per session
-- **Target Isolation:** Sniffer only captures traffic from selected device
-
-## Educational Value
-
-This project demonstrates:
-- **Network Protocols:** ARP, TCP/IP, DNS
-- **Security Concepts:** MITM attacks, packet sniffing, traffic analysis
-- **AI Integration:** Using LLMs for behavioral analysis
-- **Software Engineering:** MVC architecture, threading, event-driven programming
-- **Python Skills:** Scapy, GUI development, system-level programming
-
-## Contributing
-
-Contributions that enhance educational value are welcome:
-- Bug fixes and improvements
-- Documentation enhancements
-- Additional security auditing features
-- Cross-platform compatibility improvements
-
-## License
-
-This project is released for educational purposes only. Use responsibly and ethically.
-
-## Resources
-
-- [Scapy Documentation](https://scapy.readthedocs.io/)
-- [CustomTkinter Documentation](https://customtkinter.tomschimansky.com/)
-- [Ollama Documentation](https://ollama.ai)
-- [ARP Protocol (RFC 826)](https://tools.ietf.org/html/rfc826)
-
-## Author
-
-Created as a portfolio project demonstrating network security knowledge, AI integration, and Python development skills.
 
 ---
 
-**Remember:** With great power comes great responsibility. Use this tool ethically and legally.
+## Tech Stack
+
+- [Scapy](https://scapy.readthedocs.io/) — Packet manipulation
+- [CustomTkinter](https://customtkinter.tomschimansky.com/) — GUI framework
+- [Ollama](https://ollama.ai) — Local LLM inference (Llama 3)
+- [mac-vendor-lookup](https://pypi.org/project/mac-vendor-lookup/) — Device identification
+
+---
+
+*Created as a portfolio project demonstrating network security and AI integration.*
